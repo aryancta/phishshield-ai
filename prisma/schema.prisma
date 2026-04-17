@@ -1,0 +1,88 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Analysis {
+  id               String           @id @default(cuid())
+  reportId         String           @unique @default(cuid())
+  createdAt        DateTime         @default(now())
+  sourceType       String           // email, sms, whatsapp, screenshot, url
+  inputText        String
+  inputUrl         String?
+  verdict          String           // safe, suspicious, high_risk
+  riskScore        Int              // 0 to 100
+  confidence       Float            // 0 to 1
+  summary          String
+  recommendedActions String         // JSON string of array
+  signals          String           // JSON string of object with signal scores
+  detectedUrls     String           // JSON string of array of URL analysis objects
+  isDemo           Boolean          @default(false)
+  
+  // Relations
+  reasons          AnalysisReason[]
+  reports          Report[]
+  
+  @@map("analyses")
+}
+
+model AnalysisReason {
+  id         String   @id @default(cuid())
+  analysisId String
+  category   String   // urgency, impersonation, payment, url, brand_mismatch
+  title      String
+  detail     String
+  severity   String   // low, medium, high
+  evidence   String
+  
+  // Relations
+  analysis   Analysis @relation(fields: [analysisId], references: [id], onDelete: Cascade)
+  
+  @@map("analysis_reasons")
+}
+
+model SampleTemplate {
+  id        String   @id @default(cuid())
+  category  String   // UPI fraud, delivery scam, job scam, bank alert, impersonation
+  title     String
+  preview   String
+  fullText  String
+  sourceType String  // sms, whatsapp, email, mixed
+  riskHint  String
+  createdAt DateTime @default(now())
+  
+  @@map("sample_templates")
+}
+
+model UserPreference {
+  id                 String   @id @default(cuid())
+  theme             String   @default("dark") // light, dark
+  demoMode          Boolean  @default(false)
+  showAdvancedSignals Boolean @default(false)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  
+  @@map("user_preferences")
+}
+
+model Report {
+  id            String   @id @default(cuid())
+  analysisId    String
+  shareSlug     String   @unique @default(cuid())
+  createdAt     DateTime @default(now())
+  includeMessage Boolean @default(true)
+  title         String
+  status        String   @default("active") // active, archived
+  
+  // Relations
+  analysis      Analysis @relation(fields: [analysisId], references: [id], onDelete: Cascade)
+  
+  @@map("reports")
+}
