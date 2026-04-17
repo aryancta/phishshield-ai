@@ -6,7 +6,7 @@ import prisma from '@/lib/db'
 
 const analyzeSchema = z.object({
   text: z.string().min(1, 'Message text is required'),
-  sourceType: z.enum(['message', 'sms', 'whatsapp', 'email', 'screenshot']),
+  sourceType: z.enum(['message', 'sms', 'whatsapp', 'email', 'screenshot', 'url']),
   languageHint: z.string().optional(),
   includeUrlScan: z.boolean().optional().default(true)
 })

@@ -57,7 +57,7 @@ export class PhishShieldAnalysisEngine {
     const confidence = this.calculateConfidence(signals, reasons.length)
     
     // Get recommended actions
-    const recommendedActions = RECOMMENDED_ACTIONS[verdict]
+    const recommendedActions = [...RECOMMENDED_ACTIONS[verdict]]
     
     // Generate summary
     const summary = this.generateSummary(verdict, riskScore, patterns, detectedUrls)

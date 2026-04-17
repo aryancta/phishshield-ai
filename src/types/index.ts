@@ -1,6 +1,6 @@
 export interface AnalysisRequest {
   text: string
-  sourceType: 'message' | 'sms' | 'whatsapp' | 'email' | 'screenshot'
+  sourceType: 'message' | 'sms' | 'whatsapp' | 'email' | 'screenshot' | 'url'
   languageHint?: string
   includeUrlScan?: boolean
 }

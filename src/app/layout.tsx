@@ -1,5 +1,5 @@
 import type { Metadata } from "next"
-import { Inter, Geist } from "next/font/google"
+import { Inter } from "next/font/google"
 import { ThemeProvider } from "@/components/theme-provider"
 import { Toaster } from "@/components/ui/sonner"
 import { AppShell } from "@/components/app-shell"
@@ -11,10 +11,6 @@ const inter = Inter({
   variable: "--font-inter",
 })
 
-const geist = Geist({
-  subsets: ["latin"],
-  variable: "--font-geist",
-})
 
 export const metadata: Metadata = {
   title: {
@@ -22,7 +18,7 @@ export const metadata: Metadata = {
     template: `%s | ${APP_METADATA.name}`
   },
   description: APP_METADATA.description,
-  authors: [{ name: APP_METADATA.author, email: APP_METADATA.email }],
+  authors: [{ name: APP_METADATA.author }],
   creator: APP_METADATA.author,
   keywords: [
     "phishing detection",
@@ -66,7 +62,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${inter.variable} ${geist.variable} font-sans antialiased`}>
+      <body className={`${inter.variable} font-sans antialiased`}>
         <ThemeProvider
           attribute="class"
           defaultTheme="dark"
